@@ -20,15 +20,15 @@ func main() {
 	var ifpath, ofpath, keypath string
 	var enc, dec bool
 
-	flag.BoolVar(&enc, "-encode", false, "do encode")
+	flag.BoolVar(&enc, "encode", false, "do encode")
 	flag.BoolVar(&enc, "e", false, "(short) --encode")
-	flag.BoolVar(&dec, "-decode", false, "do decode")
+	flag.BoolVar(&dec, "decode", false, "do decode")
 	flag.BoolVar(&dec, "d", false, "(short) --decode")
-	flag.StringVar(&ifpath, "-if", "", "input file")
+	flag.StringVar(&ifpath, "if", "", "input file")
 	flag.StringVar(&ifpath, "i", "", "(short) --if")
-	flag.StringVar(&ofpath, "-of", "", "output file")
+	flag.StringVar(&ofpath, "of", "", "output file")
 	flag.StringVar(&ofpath, "o", "", "(short) --of")
-	flag.StringVar(&keypath, "-kf", "", "key file")
+	flag.StringVar(&keypath, "kf", "", "key file")
 	flag.StringVar(&keypath, "k", "", "(short) --kf")
 	flag.Parse()
 
