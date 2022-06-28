@@ -1,23 +1,24 @@
-// Copyright (c) 2018 pirakansa
 package main
 
 import (
 	"crypto/cipher"
 	"flag"
+	"fmt"
 	"io"
 	"os"
 
-	"github.com/pirakansa/go-file-encrypt/encryptiondata"
+	"fenc/internal/encdata"
+	"fenc/internal/input"
 )
 
 // xor
 func xor(a bool, b bool) bool {
-	return (a || b) && !(a && b)
+	return a != b
 }
 
 // main
 func main() {
-	var ifpath, ofpath, keypath string
+	var ifpath, ofpath string
 	var enc, dec bool
 
 	flag.BoolVar(&enc, "encode", false, "do encode")
@@ -28,31 +29,38 @@ func main() {
 	flag.StringVar(&ifpath, "i", "", "(short) --if")
 	flag.StringVar(&ofpath, "of", "", "output file")
 	flag.StringVar(&ofpath, "o", "", "(short) --of")
-	flag.StringVar(&keypath, "kf", "", "key file")
-	flag.StringVar(&keypath, "k", "", "(short) --kf")
 	flag.Parse()
 
 	if !xor(enc, dec) {
+		fmt.Println("need to option ( encode or decode )")
 		os.Exit(1)
 	}
 
 	infile, err := os.OpenFile(ifpath, os.O_RDONLY, 0755)
 	if err != nil {
+		fmt.Printf("Err: %s\n", err.Error())
 		os.Exit(1)
 	}
 	defer infile.Close()
 	outfile, err := os.OpenFile(ofpath, os.O_RDWR|os.O_CREATE|os.O_TRUNC|os.O_EXCL, 0755)
 	if err != nil {
+		fmt.Printf("Err: %s\n", err.Error())
 		os.Exit(1)
 	}
 	defer outfile.Close()
 
+	pass, err := input.ReadPassword()
+	if err != nil {
+		fmt.Printf("Err: %s", err.Error())
+		os.Exit(1)
+	}
+
 	var stream cipher.Stream
-	key := encryptiondata.GetEncriptKey(keypath)
+	key := encdata.GetEncriptKey(pass)
 	if enc {
-		stream = encryptiondata.GetCipherObj(key)
+		stream = encdata.GetCipherObj(key)
 	} else {
-		stream = encryptiondata.GetDecipherObj(key)
+		stream = encdata.GetDecipherObj(key)
 	}
 
 	writer := cipher.StreamWriter{S: stream, W: outfile}
