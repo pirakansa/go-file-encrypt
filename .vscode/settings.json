@@ -1,5 +1,16 @@
 {
     "editor.renderWhitespace": "boundary",
     "editor.accessibilitySupport": "off",
-    "diffEditor.ignoreTrimWhitespace": false
+    "diffEditor.ignoreTrimWhitespace": false,
+    "github.copilot.chat.commitMessageGeneration.instructions": [
+        {
+        "text": "必ず英語で記述してください"
+        },
+        {
+        "text": "コミットメッセージは、最初にConventional Commitsに則って記述してください"
+        },
+        {
+        "text": "その後ファイルごとの詳細な変更内容を記述してください"
+        }
+    ],
 }
